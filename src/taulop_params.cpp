@@ -34,7 +34,7 @@ TauLopParam::TauLopParam() {
     this->v_chn[0] = new TaulopParamChannel (TauLopParam::network, 0, this->max_idx);
     this->v_chn[1] = new TaulopParamChannel (TauLopParam::network, 1, this->max_idx);
     
-    this->max_tau = 8;  // TBD
+    this->max_tau = 10;  // TBD
     
     this->p2p_T0 = new double * [this->max_tau];
     

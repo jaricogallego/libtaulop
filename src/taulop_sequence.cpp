@@ -68,34 +68,44 @@ void TauLopSequence::substract (Transmission *min_c, int tau) {
         
         this->l_seq->consult(c);
         
+        
 #if BUG_T == 0
-        // Substract proportional time in blocks
-        //long overlap = (c->getN() * t_min) / c->getCost();
-        long overlap = 0;
         
-        //        if (c->areConcurrent(min_c)) {
-        //            overlap = min_c->getN();
-        //        } else {
-        //            overlap = c->getBytes(t_min, 1);
-        //        }
+        if (c->areConcurrent(min_c)) {
+            
+            long m_new = c->getM() - min_c->getM();
+            
+            if (m_new <= 0) {
+                
+                this->l_seq->remove();
+                delete c;
+                
+            } else {
+                
+                c->putM(m_new);
+                
+            }
         
-        overlap = c->getBytes(t_min, tau);
-        
-        if (overlap < 0)
-            cout << "DBG ERROR: pbrcol - not allowed overlap < 0" << endl;
-        
-        long curr_m = c->getM();
-        
-        // DBG: cout << "Overlap in " << overlap << " bytes with " << curr_n << " and " << tau << "||. ";
-        
-        if ((curr_m - overlap) > 0) { // TBD: a threshold for rounding issues could be convenient
-            c->putM(curr_m - overlap);
-            // DBG: cout << "Left: " << c->getN() << endl;
-        } else { // == 0
-            this->l_seq->remove();
-            delete c;
-            // DBG: cout << "Deleted." << endl;
+        } else {  // Not concurrent
+            
+            long overlap = 0;
+            
+            // tau is the real tau after calculating concurrency
+            overlap = c->getBytes(t_min, tau);
+            if (overlap < 0)
+                cout << "DBG ERROR: pbrcol - not allowed overlap < 0" << endl;
+
+            long curr_m = c->getM();
+            
+            if ((curr_m - overlap) > 0) { // TBD: a threshold for rounding issues could be convenient
+                c->putM(curr_m - overlap);
+            } else { // == 0
+                this->l_seq->remove();
+                delete c;
+            }
+            
         }
+        
         
 #else
         

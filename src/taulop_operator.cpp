@@ -133,7 +133,7 @@ void TauLopOperator::add (Transmission *c) {
     
     this->l_comm->moveToEnd();
     this->l_comm->next();
-    this->l_comm->insert(c);
+    this->l_comm->insert(c);    
 }
 
 
@@ -171,6 +171,7 @@ void TauLopOperator::evaluate () {
         }
         
     }
+
 }
 
 

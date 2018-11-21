@@ -12,6 +12,7 @@
 #include "ilist.h"
 #include "transmission.hpp"
 
+#include <list>
 #include <iostream>
 
 
@@ -31,14 +32,14 @@ public:
     TauLopOperator  ();
     ~TauLopOperator ();
     
-    void   add            (Transmission *  c);
-    void   evaluate       ();
-    double getMinCost     (Transmission * &c);
-    int    getConcurrency (Transmission *  c); // Get the concurrency (tau) of the comm. in the same channel
+    void   add             (Transmission *  c);
+    void   evaluate        ();
+    double getMinCost      (Transmission * &c);
+    int    getConcurrency  (Transmission *  c); // Get the concurrency (tau) of the comm. in the same channel
         
-    void  show_init_comms ();
-    void  show_concurrent ();
-    void  show_channel    ();
+    void   show_init_comms ();
+    void   show_concurrent ();
+    void   show_channel    ();
 };
 
 #endif /* taulop_operator_hpp */
