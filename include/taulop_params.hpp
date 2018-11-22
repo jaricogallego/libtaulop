@@ -13,6 +13,8 @@
 #include "taulop_params_channel.hpp"
 
 #include <iostream>
+#include <vector>
+using namespace std;
 
 
 // TBD: Comment the attributes and methods.
@@ -22,37 +24,36 @@
 class TauLopParam {
     
 private:
-    
-    TaulopParamChannel *v_chn [DEFAULT_CHN_NR];
+        
+    vector<TaulopParamChannel *> channel;
     
     // P2P cost in both channels. (TBD: maybe it must be a class for any alg.)
-    double **p2p_T0;
-    double **p2p_T1;
+    vector<double **> p2p;
     
-    long int *sizes; // Array of message sizes
+    vector<long> sizes;
     
     int  max_idx;
     int  max_tau;
-    long max_m;
     
     static bool instanceFlag;
     static TauLopParam *single;
     
-    static string network;
-        
+    static vector<string> networks;
+
+    
     TauLopParam(); //private constructor
     
-    void  loadSizes ();
-    void  setP2P    ();
+    void  setP2P ();
+    
     
 public:
     
-    static void setInstance(string network);
+    static void setInstance(vector<string> networks);
     static TauLopParam* getInstance();
     
     ~TauLopParam();
     
-    double  getTime  (long n, int tau, int chn);
+    double  getTime  (long   m, int tau, int chn);
     long    getBytes (double t, int tau, int chn);
     
     void show ();
