@@ -185,7 +185,8 @@ double TauLopParam::getTime (long m, int tau, int chn) {
 
     if (tau > this->max_tau) {
         cerr << "ERROR: value of tau is too high: " << tau << " (" << this->max_tau << ")" << endl;
-        return -1;
+        tau = max_tau;
+        //return -1;
     }
     
     
@@ -249,7 +250,8 @@ long TauLopParam::getBytes (double t, int tau, int chn) {
     
     if (tau > this->max_tau) {
         cerr << "ERROR: value of tau is too high: " << tau << " (" << this->max_tau << ")" << endl;
-        return -1;
+        tau = max_tau;
+        //return -1;
     }
 
     

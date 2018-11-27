@@ -54,12 +54,12 @@ double ex2_bcast (int P) {
     Mapping *map = new Mapping(P, Q, MAPPING_SEQ);
     world->map(map);
     world->show();
-
+    
     Collective *bcast  = new BcastBinomial();
     int size = 128 * 1024;
     TauLopCost *tc = bcast->evaluate(world, &size);
     double t = tc->getTime();
-
+    
     delete tc;
     delete map;
     delete world;
@@ -236,12 +236,12 @@ int ex5_allgather () {
 
 
 
-int main (int argc, const char * argv[]) {
+int main_2 (int argc, const char * argv[]) {
     
     double t      = 0.0;
     
     // Network parameters
-    TauLopParam::setInstance("IB");
+    TauLopParam::setInstance({"SHM", "IB"});
     
     // Binomial broadcast (default mapping)
     t = ex1_bcast(16);
@@ -260,9 +260,158 @@ int main (int argc, const char * argv[]) {
     
     // Comparison of allgather algorithms
     ex5_allgather();
-
+    
     return 0;
 }
+
+
+
+int main (int argc, const char * argv[]) {
+    
+    const int sizes_OLD[] = {
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256,
+        512,
+        1024,
+        2048,
+        4096,
+        8192,
+        16384,
+        32768,
+        65536,
+        131072,
+        196608,
+        262144,
+        393216,
+        524288,
+        786432,
+        1048576,
+        1572864,
+        2097152,
+        4194304,
+        6291456,
+        8388608};
+    
+    
+    const int sizes_TODOS [] = {
+        1,
+        64,
+        128,
+        256,
+        512,
+        1024,
+        1536,
+        2048,
+        3072,
+        4096,
+        5120,
+        6144,
+        7168,
+        8192,
+        16384,
+        32768,
+        49152,
+        65536,
+        98304,
+        131072,
+        196608,
+        262144,
+        393216,
+        524288,
+        786432,
+        1048576,
+        1572864,
+        2097152,
+        3145728,
+        4194304
+    };
+    
+    const int sizes [] = {
+        64,
+        128,
+        256,
+        512,
+        1024,
+        2048,
+        4096,
+        6144,
+        8192,
+        16384,
+        32768,
+        49152,
+        65536,
+        98304,
+        131072,
+        196608,
+        262144,
+        393216,
+        524288,
+        786432,
+        1048576,
+        1572864,
+        2097152,
+        3145728,
+        4194304,
+    };
+    
+    const int sizes_[] = {
+        1024};
+    
+    
+    TauLopParam::setInstance({"SHM","IB"});
+    //TauLopParam::setInstance("TCP");
+    
+    Collective *ring = new AllgatherRing();
+    Collective *rda  = new AllgatherRDA();
+    
+    const int Q = 4;
+    const int P = 64;
+    
+    Communicator *comm = new Communicator (P);
+    //Mapping *map = new Mapping(P, nodes);
+    Mapping *map = new Mapping(P, Q, MAPPING_SEQ);
+    comm->map(map);
+    comm->show();
+    cout << endl;
+    
+    //for (int m = MIN_SIZE; m <= MAX_SIZE; m *= 2) {
+    for (int i = 0; i < sizeof(sizes)/sizeof(int); i++) {
+        
+        int m = sizes[i];
+        
+        if (m < 16) {
+            cout << "[" << comm->getSize() << "," << m << "]   \t  ";
+        } else if (m < 1024) {
+            cout << "[" << comm->getSize() << "," << m << "]   \t  ";
+        } else {
+            cout << "[" << comm->getSize() << "," << m << "] \t ";
+        }
+        
+        TauLopCost *t_ring = ring->evaluate (comm, &m);
+        TauLopCost *t_rda  = rda->evaluate  (comm, &m);
+        
+        cout << fixed << setprecision(9) << "  \t  " << t_ring->getTime() << "  \t " << t_rda->getTime() << endl;
+        //cout << fixed << setprecision(9) << " \t  " << t_ring->getTime() << endl;
+        
+        delete t_ring;
+        delete t_rda;
+    }
+    
+    delete map;
+    delete comm;
+    
+    delete (AllgatherRing *) ring;
+    delete (AllgatherRing *) rda;
+    return 0;
+}
+
 
 
 

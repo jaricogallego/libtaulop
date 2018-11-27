@@ -84,6 +84,7 @@ TauLopCost * AllgatherRDA::evaluate (Communicator *comm, int *size, int root) {
 #if TLOP_DEBUG == 1
         cout << " -- Cost: " << endl;
         cost->show();
+        //cout << " -->> Time: " << cost->getTime() << endl;
 #endif
         
         delete conc;

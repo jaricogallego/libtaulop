@@ -222,8 +222,13 @@ long Transmission::getBytes (double t, int tau) {
 bool Transmission::areConcurrent (const Transmission *c) {
     
     // Condition for considering two communications as concurrent
-    if ( (this->channel == c->channel) &&
-        (this->node_dst == c->node_dst) )
+    if ( (this->channel  == c->channel)  &&
+         (this->node_dst == c->node_dst))
+        
+    //if (  (this->channel  == c->channel)  &&
+    //     ((this->node_dst == c->node_dst) ||
+    //      (this->node_src == c->node_dst) ||
+    //      (this->node_dst == c->node_src)   ) )
         
     //if (this->channel == c->channel)
         return true;

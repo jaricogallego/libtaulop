@@ -93,7 +93,7 @@ void TauLopSequence::substract (Transmission *min_c, int tau) {
             // tau is the real tau after calculating concurrency
             overlap = c->getBytes(t_min, tau);
             if (overlap < 0)
-                cout << "DBG ERROR: pbrcol - not allowed overlap < 0" << endl;
+                cout << "DBG ERROR: not allowed overlap < 0" << endl;
 
             long curr_m = c->getM();
             
