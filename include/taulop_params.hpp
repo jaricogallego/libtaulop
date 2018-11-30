@@ -38,7 +38,7 @@ private:
     static bool instanceFlag;
     static TauLopParam *single;
     
-    static vector<string> networks;
+    static vector<string> channel_names;
 
     
     TauLopParam(); //private constructor
@@ -48,7 +48,7 @@ private:
     
 public:
     
-    static void setInstance(vector<string> networks);
+    static void setInstance(vector<string> channel_names);
     static TauLopParam* getInstance();
     
     ~TauLopParam();

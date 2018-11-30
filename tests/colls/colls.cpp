@@ -366,7 +366,6 @@ int main (int argc, const char * argv[]) {
     
     
     TauLopParam::setInstance({"SHM","IB"});
-    //TauLopParam::setInstance("TCP");
     
     Collective *ring = new AllgatherRing();
     Collective *rda  = new AllgatherRDA();

@@ -19,9 +19,9 @@
 using namespace std;
 
 
-// Initialization of tatic variables
+// Initialization of static variables
 TauLopParam* TauLopParam::single = nullptr;
-vector<string> TauLopParam::networks;
+vector<string> TauLopParam::channel_names;
 
 
 
@@ -32,7 +32,7 @@ TauLopParam::TauLopParam() {
 
     // Create communication channels information
     int num = 0;
-    for (auto it = TauLopParam::networks.begin(); it != TauLopParam::networks.end(); ++it, num++) {
+    for (auto it = TauLopParam::channel_names.begin(); it != TauLopParam::channel_names.end(); ++it, num++) {
         this->channel.push_back(new TaulopParamChannel (*it, num));
     }
     
@@ -64,7 +64,7 @@ void TauLopParam::setP2P  () {
     
     int chn_nr = 0;
     
-    for (auto it = TauLopParam::networks.begin(); it != TauLopParam::networks.end(); ++it, chn_nr++) {
+    for (auto it = TauLopParam::channel_names.begin(); it != TauLopParam::channel_names.end(); ++it, chn_nr++) {
         
         double **P2P = this->p2p[chn_nr];
 
@@ -122,7 +122,7 @@ TauLopParam::~TauLopParam () {
     
     TauLopParam::single = nullptr;
     
-    for (int chn_nr; chn_nr < this->networks.size(); chn_nr++) {
+    for (int chn_nr; chn_nr < TauLopParam::channel_names.size(); chn_nr++) {
         delete this->channel[chn_nr];
     }
     
@@ -141,14 +141,14 @@ void TauLopParam::setInstance(vector<string> networks) {
     
     if (!TauLopParam::single) {
         
-        TauLopParam::networks = networks;
-        TauLopParam::single   = new TauLopParam();
+        TauLopParam::channel_names = networks;
+        TauLopParam::single        = new TauLopParam();
         
     } else {
         
         cerr << "ERROR: network parameters already loaded from: " << endl;
         
-        for (auto i = TauLopParam::networks.begin(); i != TauLopParam::networks.end(); ++i) {
+        for (auto i = TauLopParam::channel_names.begin(); i != TauLopParam::channel_names.end(); ++i) {
             cout << *i << endl;
         }
         
@@ -160,6 +160,8 @@ TauLopParam* TauLopParam::getInstance() {
     
     if (!TauLopParam::single) {
         TauLopParam::single = new TauLopParam();
+        cerr << "ERROR: no instance has been created by now." << endl;
+        return nullptr;
     }
     
     return single;
@@ -178,7 +180,7 @@ double TauLopParam::getTime (long m, int tau, int chn) {
         return 0.0;
     }
 
-    if (chn >= this->networks.size()) {
+    if (chn >= TauLopParam::channel_names.size()) {
         cerr << "ERROR: unknown channel: " << chn << endl;
         return -1;
     }
@@ -243,7 +245,7 @@ long TauLopParam::getBytes (double t, int tau, int chn) {
         return 0;
     }
     
-    if (chn >= this->networks.size()) {
+    if (chn >= TauLopParam::channel_names.size()) {
         cerr << "ERROR: unknown channel: " << chn << endl;
         return -1;
     }
@@ -301,9 +303,9 @@ void TauLopParam::show () {
     
     int chn_nr = 0;
     
-    for (auto it = this->networks.begin(); it != this->networks.end(); ++it, chn_nr++) {
+    for (auto it = TauLopParam::channel_names.begin(); it != TauLopParam::channel_names.end(); ++it, chn_nr++) {
         
-        cout << "Network:  " << *it << endl;
+        cout << "Channel name:  " << *it << endl;
         double **P2P = this->p2p[chn_nr];
         
         for (int i = 0; i < this->max_idx; i++) {
