@@ -21,6 +21,8 @@
 #include "gatherv_binomial.hpp"
 #include "allgather_ring.hpp"
 #include "allgather_rda.hpp"
+#include "alltoall_basic.hpp"
+#include "alltoall_linear.hpp"
 
 #include "taulop_sequence.hpp"
 #include "taulop_concurrent.hpp"
