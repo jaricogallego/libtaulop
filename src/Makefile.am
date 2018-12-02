@@ -19,7 +19,8 @@ libtaulop_a_SOURCES += src/process.cpp \
   src/scatter_binomial.cpp \
   src/bcast_binomial_openmpi.cpp \
   src/alltoall_basic.cpp \
-  src/alltoall_linear.cpp
+  src/alltoall_linear.cpp \
+  src/alltoall_pairwise.cpp
 
 
 

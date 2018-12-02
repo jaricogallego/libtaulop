@@ -23,7 +23,8 @@ libtaulop_a_HEADERS += include/ilist.h \
   include/scatter_binomial.hpp \
   include/bcast_binomial_openmpi.hpp \
   include/alltoall_basic.hpp \
-  include/alltoall_linear.hpp
+  include/alltoall_linear.hpp \
+  include/alltoall_pairwise.hpp
 
 
 

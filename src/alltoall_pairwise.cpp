@@ -1,12 +1,12 @@
 //
 //  alltoall_linear.cpp
-//  Linear algorithms for the Alltoall collective implemented in Open MPI 3.1
+//  Pairwise algorithm for the Alltoall collective implemented in Open MPI 3.1 (tuned component)
 //
 //  Created by jarico on 1/Dic/18.
 //  Copyright © 2016 Juan A. Rico. All rights reserved.
 //
 
-#include "alltoall_linear.hpp"
+#include "alltoall_pairwise.hpp"
 
 #include "transmission.hpp"
 #include "collective.hpp"
@@ -21,28 +21,25 @@ using namespace std;
 
 
 
-AlltoallLinear::AlltoallLinear () {
+AlltoallPairwise::AlltoallPairwise () {
     
 }
 
-AlltoallLinear::~AlltoallLinear () {
+AlltoallPairwise::~AlltoallPairwise () {
     
 }
 
 
-TauLopCost * AlltoallLinear::evaluate (Communicator *comm, int *size, int root) {
+TauLopCost * AlltoallPairwise::evaluate (Communicator *comm, int *size, int root) {
     
     TauLopConcurrent *conc;
     TauLopSequence   *seq;
     Transmission     *T;
     Process          *p_src, *p_dst;
     
-    // This algorithm uses a sendrecv in each process for the local data
-    // Then post a receive (using non-blocking communication) from the rest, with the order:
-    //   p -> p + 1 % P
-    // Finally, a point-to-point send message post to every process, in (reverse) order:
-    //   p <- p - 1 % P
-    
+    // Every process uses sendrecv of a message of size (*size):
+    //   sendto: (rank + step) % size;
+    //   recvfrom = (rank + size - step) % size;
     
     TauLopCost *cost = new TauLopCost();
     
@@ -54,10 +51,10 @@ TauLopCost * AlltoallLinear::evaluate (Communicator *comm, int *size, int root) 
         
         seq = new TauLopSequence ();
         
-        for (int i = p; i != (p + P - 1) % P; i = (i + 1) % P) {
+        for (int step = 1; step < P + 1; step++) {
                 
             int src = p;
-            int dst = i;
+            int dst = (p + step) % P;
             
             int node_src = comm->getNode(src);
             int node_dst = comm->getNode(dst);

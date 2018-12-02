@@ -23,6 +23,7 @@
 #include "allgather_rda.hpp"
 #include "alltoall_basic.hpp"
 #include "alltoall_linear.hpp"
+#include "alltoall_pairwise.hpp"
 
 #include "taulop_sequence.hpp"
 #include "taulop_concurrent.hpp"

@@ -143,7 +143,8 @@ am_libtaulop_a_OBJECTS = src/process.$(OBJEXT) \
 	src/gather_binomial.$(OBJEXT) src/gatherv_binomial.$(OBJEXT) \
 	src/scatter_binomial.$(OBJEXT) \
 	src/bcast_binomial_openmpi.$(OBJEXT) \
-	src/alltoall_basic.$(OBJEXT) src/alltoall_linear.$(OBJEXT)
+	src/alltoall_basic.$(OBJEXT) src/alltoall_linear.$(OBJEXT) \
+	src/alltoall_pairwise.$(OBJEXT)
 libtaulop_a_OBJECTS = $(am_libtaulop_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -322,7 +323,7 @@ libtaulop_a_HEADERS = include/ilist.h config.h include/taulop_config.h \
 	include/gather_binomial.hpp include/gatherv_binomial.hpp \
 	include/scatter_binomial.hpp \
 	include/bcast_binomial_openmpi.hpp include/alltoall_basic.hpp \
-	include/alltoall_linear.hpp
+	include/alltoall_linear.hpp include/alltoall_pairwise.hpp
 libtaulop_a_SOURCES = src/process.cpp src/taulop_cost.cpp \
 	src/transmission.cpp src/taulop_params.cpp \
 	src/taulop_operator.cpp src/taulop_sequence.cpp \
@@ -332,7 +333,8 @@ libtaulop_a_SOURCES = src/process.cpp src/taulop_cost.cpp \
 	src/allgather_ring.cpp src/bcast_binomial.cpp \
 	src/gather_binomial.cpp src/gatherv_binomial.cpp \
 	src/scatter_binomial.cpp src/bcast_binomial_openmpi.cpp \
-	src/alltoall_basic.cpp src/alltoall_linear.cpp
+	src/alltoall_basic.cpp src/alltoall_linear.cpp \
+	src/alltoall_pairwise.cpp
 EXTRA_DIST = 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -468,6 +470,8 @@ src/alltoall_basic.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/alltoall_linear.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
+src/alltoall_pairwise.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 
 libtaulop.a: $(libtaulop_a_OBJECTS) $(libtaulop_a_DEPENDENCIES) $(EXTRA_libtaulop_a_DEPENDENCIES) 
 	$(AM_V_at)-rm -f libtaulop.a
@@ -485,6 +489,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/allgather_ring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/alltoall_basic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/alltoall_linear.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/alltoall_pairwise.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/bcast_binomial.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/bcast_binomial_openmpi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/bcast_linear.Po@am__quote@
